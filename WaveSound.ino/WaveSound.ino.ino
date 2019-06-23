@@ -1,10 +1,8 @@
 #include <FastLED.h>
-#include <reactive_common.h>
 
 //Analog input and initial value
 int analogInput = A1;
 double audioValue = 0;
-
 
 void setup() {
   // put your setup code here, to run once:
@@ -14,4 +12,8 @@ void setup() {
 void loop() {
   // put your main code here, to run repeatedly:
   
+}
+
+void analogInput(){
+  audioValue = analogRead(analogInput); //Reading voltage from A1 - analog pin
 }
