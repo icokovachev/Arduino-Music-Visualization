@@ -1,8 +1,14 @@
 #include <FastLED.h>
+#include <reactive_common.h>
+
+//Analog input and initial value
+int analogInput = A1;
+double audioValue = 0;
+
 
 void setup() {
   // put your setup code here, to run once:
-  
+  pinMODE(A1, input);
 }
 
 void loop() {
