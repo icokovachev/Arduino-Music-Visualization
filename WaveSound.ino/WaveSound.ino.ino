@@ -12,8 +12,14 @@ int RMS_count_max=50;
 
 // Declare Variables
 int RMS_sum = 0;
-int RMS_Count=0;
-int RMS_Display_value=0;
+int RMS_count = 0;
+int RMS_Display_value = 0;
+
+double temp_sum_value = 0;
+double temp_RMS_sum = 0;
+double calculated_RMS = 0;
+int RMS_average_count = 0;
+int RMS_average_count_max = 20;
 
 int Led_Number = 3;
   
@@ -24,7 +30,7 @@ void setup() {
 
 void loop() {
   // put your main code here, to run repeatedly:
-  
+  ReadAnalogInput();
 }
 
 int Calculate_Number_of_LEDS_to_Light(int RMS_sum)
@@ -37,30 +43,31 @@ void LightLEDs(int Led_Number)
   
 }
 
-void RMS_accumulate(int iRMS)
+int accumulate_RMS(int audio_value)
 {
-  RMS_sum = RMS_sum + iRMS;
-  RMS_Count++;
-  if (RMS_Count = RMS_count_max)
+  temp_sum_value = sq(audio_value - 512);
+  RMS_count++;
+  temp_RMS_sum = temp_RMS_sum + temp_sum_value;
+  if (RSM_count = RMS_count_max)
   {
-    RMS_sum = RMS_sum / RMS_count_max;
-    Led_Number = Calculate_Number_of_LEDS_to_Light(RMS_sum);
-    LightLEDs(Led_Number);
-
-    RMS_sum = 0;
-    RMS_Count = 0;
+    calculated_RMS = sqrt(temp_RMS_sum / RMS_count);
+    Accumulate_RMS_Average(calculated_RMS);
   }
 }
 
-void Accumulate_Audio_Value(int audioValue)
+void Accumulate_RMS_Average(double calculated_RMS)
 {
-  //Accumulate...
-  RMS_accumulate(iRMS);
+  Accumulate_RMS_Average
+  RMS_average_count++;
+  //Acumulate_RMS_sum = Acomulate_RMS_sum + 
+  if (RMS_average_count = RMS_average_count_max)
+  {
+    RMS_average = sqrt(temp_RMS_average / RMS_average_count);
+  }
 }
 
 void ReadAnalogInput()
 {
   audioValue = analogRead(analogInput); //Reading voltage from A1 - analog pin
-
   Accumulate_Audio_Value(audioValue);
 }
