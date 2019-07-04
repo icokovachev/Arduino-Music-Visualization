@@ -11,6 +11,7 @@ Hristo Kovachev
 
 # Used resources:
 For specific commands in used language : https://www.arduino.cc/reference/en/ <br />
+For libraries : https://www.arduino.cc/en/Reference/Libraries <br />
 For information about the LED strip : https://cdn-shop.adafruit.com/datasheets/WS2812B.pdf <br />
 For FastLED library : http://fastled.io/ <br />
 
