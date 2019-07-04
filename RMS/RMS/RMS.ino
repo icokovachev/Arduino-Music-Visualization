@@ -1,11 +1,15 @@
-//#define LED_INCLUDED 
+#define LED_INCLUDED 
 
 #ifdef LED_INCLUDED 
    #include <FastLED.h>
 #endif 
 
 //Analog input and initial value
-int analogInput = A1;
+//int analogInput = A1;
+#define analog_Input_Aux_Mic A1    //Analog input pin defining
+#define analog_Input_Refresh_Rate_LED A2  //Analog reading for refreshrate defining
+#define latency 50  //latency between readings
+
 double audioValue = 0;
 
 //RMS values
@@ -32,7 +36,7 @@ double RMS_average = 0;
 #define PIN 8 // ??
 
 #ifdef LED_INCLUDED 
-    CRGB leds[NUM_LEDS];
+    CRGB leds[MAX_NUM_LEDS];
 #else
     int leds[MAX_NUM_LEDS];//fix
 #endif
@@ -41,9 +45,10 @@ int Led_Number = 3; //to delete
   
 void setup() {
   // put your setup code here, to run once:
-  pinMode(A1, INPUT); //?????
+  //pinMode(A1, INPUT); //?????
+  pinMode(analog_Input_Aux_Mic, INPUT);
   #ifdef LED_INCLUDED 
-    FastLED.addLeds<WS2812, PIN, GRB>(leds, NUM_LEDS).setCorrection(TypicalLEDStrip);
+    FastLED.addLeds<WS2812, PIN, GRB>(leds, MAX_NUM_LEDS).setCorrection(TypicalLEDStrip);
   #endif
 }
 
@@ -54,16 +59,38 @@ void loop() {
 
 void Accumulate_Audio_Value(int audioValue)
 {
-  audioValue -= 512;
+  Serial.print("Accumulate_Audio_Value -> audioValue = ");                      //Printing on COM port for debuging
+  Serial.println(audioValue);                      //Printing on COM port for debuging
+  
+  audioValue = audioValue - 512;
+  Serial.print("Accumulate_Audio_Value -> audioValue - 512 = ");                      //Printing on COM port for debuging
+  Serial.println(audioValue);                      //Printing on COM port for debuging
+
   accumulate_RMS(audioValue);
 }
+
+/*
+void Trace(char[] func_name, char[] label, double dVariable )
+{
+  Serial.print(func_name);                      //Printing on COM port for debuging
+  Serial.print(" -> ");                      //Printing on COM port for debuging
+  Serial.print(label);                      //Printing on COM port for debuging
+  Serial.println(dVariable);                      //Printing on COM port for debuging
+}*/
 
 void accumulate_RMS(int audio_value)
 {
   temp_sum_value = sq(audio_value - 512);
+
+  Serial.print("accumulate_RMS -> temp_sum_value [sq(audio_value - 512)] = ");                      //Printing on COM port for debuging
+  Serial.println(temp_sum_value);                      //Printing on COM port for debuging
+  
   RMS_count++;
+  Serial.print("accumulate_RMS -> temp_sum_value [sq(audio_value - 512)] = ");                      //Printing on COM port for debuging
+  Serial.println(temp_sum_value);                      //Printing on COM port for debuging
+
   temp_RMS_sum = temp_RMS_sum + temp_sum_value;
-  if (RMS_count == RMS_count_max)
+  if (RMS_count = RMS_count_max)
   {
     calculated_RMS = sqrt(temp_RMS_sum / RMS_count);
     Accumulate_RMS_Average(calculated_RMS);
@@ -97,8 +124,14 @@ int Calculate_Number_of_LEDS_to_Light(int RMS_sum)
 
 void ReadAnalogInput()
 {
-  audioValue = analogRead(analogInput); //Reading voltage from A1 - analog pin
+
+  audioValue = analogRead(analog_Input_Aux_Mic);         //Setting up the analog read for Aux and Mic inputs
+  Serial.println(audioValue);                      //Printing on COM port for debuging
+   
+  //audioValue = analogRead(v); //Reading voltage from A1 - analog pin
   Accumulate_Audio_Value(audioValue);
+  delay(latency);                               //waiting for 50ms for another read
+   
 }
 
 // ==============Led Strip=================
