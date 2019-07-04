@@ -3,17 +3,20 @@
 Curs project for National program "Training for IT career"
 
 # The team: 
-Mariyan Baltov,
-Elitsa Lazarova,
-Teodor Nikolov,
-Pavel Draganov, 
-Hristo Kovachev
+[Mariyan Baltov](https://github.com/mariyanb007),
+[Elitsa Lazarova](https://github.com/eli-lazarova),
+[Teodor Nikolov](https://github.com/Zang8),
+[Pavel Draganov](https://github.com/OnlyBadNews), 
+[Hristo Kovachev](https://github.com/icokovachev)
+
+# The Idea behind the project:
+To "visualize" the analog signal, comming from Mic and AUX input. We use Arduino's 10 bit pricesor to read the analog signal in format of numbers in the range of 0 to 1023 (2 on the power of 10 /10bit/), than we convert the signal and after some calculations we send signal to the LED strip.
 
 # Used resources:
 For specific commands in used language : https://www.arduino.cc/reference/en/ <br />
 For libraries : https://www.arduino.cc/en/Reference/Libraries <br />
 For information about the LED strip : https://cdn-shop.adafruit.com/datasheets/WS2812B.pdf <br />
-For FastLED library : http://fastled.io/ <br />
+[FastLED](http://fastled.io/) library  <br />
 
 # IDE we used: 
 [Arduino IDE](https://www.arduino.cc/en/Main/Software) <br />
