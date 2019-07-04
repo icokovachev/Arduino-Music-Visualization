@@ -16,10 +16,9 @@ For information about the LED strip : https://cdn-shop.adafruit.com/datasheets/W
 For FastLED library : http://fastled.io/ <br />
 
 # IDE we used: 
-Arduino IDE - https://www.arduino.cc/en/Main/Software <br />
-Microsoft Visual Studio 2019 Community Edition +  Arduino IDE and GDB for Visual Studio <br /> 
-https://visualstudio.microsoft.com/downloads/ <br />
-https://marketplace.visualstudio.com/items?itemName=VisualMicro.ArduinoIDEforVisualStudio <br />
+[Arduino IDE](https://www.arduino.cc/en/Main/Software) <br />
+[Microsoft Visual Studio 2019 Community Edition](https://visualstudio.microsoft.com/downloads/) + [Arduino IDE and GDB for Visual Studio](https://marketplace.visualstudio.com/items?itemName=VisualMicro.ArduinoIDEforVisualStudio) <br /> 
+
 
 # We bought our items from:
 Arduino Uno Rev.3 - http://www.elimex.bg/product/127779/kit-k2000-razvoyna-platka-s-atmega-328p.html <br />
