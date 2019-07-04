@@ -10,7 +10,7 @@ Curs project for National program "Training for IT career"
 [Hristo Kovachev](https://github.com/icokovachev)
 
 # The Idea behind the project:
-To "visualize" the analog signal, comming from Mic and AUX input. We use Arduino's 10 bit pricesor to read the analog signal in format of numbers in the range of 0 to 1023 (2 on the power of 10 /10bit/), than we convert the signal and after some calculations we send signal to the LED strip.
+To "visualize" the analog signal, comming from Mic and AUX input. We use Arduino's 10 bit converter resolution to read the analog signal in format of numbers in the range of 0 to 1023 (2 on the power of 10 /10bit/), than we convert the signal and after some calculations we send signal to the LED strip.
 
 # Used resources:
 For specific commands in used language : https://www.arduino.cc/reference/en/ <br />
