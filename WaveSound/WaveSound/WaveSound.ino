@@ -21,6 +21,7 @@ CRGB leds[MAX_NUM_LEDS];							// Create Array leds[] with array size = MAX_NUM_
 //RMS values					
 //long iRMS = 0;										
 //////////////////End//////////////////////
+int refRate = analogRead(analog_Input_Refresh_Rate_LED) / 25;
 
 // Declare Constants  
 long RMS_count_max = 30;								// Defining how many RMS values will be collected and than passed for averaging
@@ -56,6 +57,9 @@ void loop()
 	ReadAnalogInput();
 
 	//delay(50);
+	int refRate = analogRead(analog_Input_Refresh_Rate_LED) / 25;
+	RMS_clear_count_max = refRate;
+
 }
 
 void ReadAnalogInput()
@@ -199,8 +203,29 @@ void LightLEDs(int NumLEDs)
   byte red_Off=0, green_Off=0, blue_Off=0;
   
   for (int i = 0; i < MAX_NUM_LEDS; i++) {
-    if (i<=NumLEDs)
-      setPixel(i, red_On, green_On, blue_On);
+	  if (i <= NumLEDs)
+	  {
+		  if (i >= MAX_NUM_LEDS - 3 && i < MAX_NUM_LEDS)
+		  {
+			  byte red_On = 255, green_On = 0, blue_On = 0;
+			  setPixel(i, red_On, green_On, blue_On);
+		  }
+		  if (i >= MAX_NUM_LEDS - 8 && i < MAX_NUM_LEDS - 3)
+		  {
+			  byte red_On = 255, green_On = 211, blue_On = 0;
+			  setPixel(i, red_On, green_On, blue_On);
+		  }
+		  if (i < MAX_NUM_LEDS - 8 && i >= MAX_NUM_LEDS - 28 )
+		  {
+			  byte red_On = 0, green_On = 255, blue_On = 0;
+			  setPixel(i, red_On, green_On, blue_On);
+		  }
+		  if (i < MAX_NUM_LEDS - 28)
+		  {
+			  byte red_On = 0, green_On = 0, blue_On = 255;
+			  setPixel(i, red_On, green_On, blue_On);
+		  }
+	  }
     else
       setPixel(i, red_Off, green_Off, blue_Off);
   }
