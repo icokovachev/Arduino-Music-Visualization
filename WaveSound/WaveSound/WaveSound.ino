@@ -23,12 +23,12 @@ CRGB leds[MAX_NUM_LEDS];							// Create Array leds[] with array size = MAX_NUM_
 //////////////////End//////////////////////
 
 // Declare Constants  
-long RMS_count_max=50;								// Defining how many RMS values will be collected and than passed for averaging
-long RMS_clear_count_max = 20;						// ------> TODO : Make LED strip refresh rate flexible <------
+long RMS_count_max = 30;								// Defining how many RMS values will be collected and than passed for averaging
+long RMS_clear_count_max = 10;							// ------> TODO : Make LED strip refresh rate flexible <------
 
 // Declare Variables
-int audioValue = 0;									// Defining variable for A1 input analogRead() value
-int actualAudioValue = 0;							// Holds audioValue - 512
+long audioValue = 0;									// Defining variable for A1 input analogRead() value
+long actualAudioValue = 0;							// Holds audioValue - 512
 long RMS = 0;										// Defining variable to hold actualAudioValue on power of 2 /formula/
 long RMS_count = 0;									// Defining counter for how many RMS values are inputed
 long RMS_sum = 0;									// Defining variable to hold RMS_count_max/50/ values for RMS
@@ -72,7 +72,7 @@ void ReadAnalogInput()
 	//delay(latency);
 }
 
-void Accumulate_Audio_Value(int audioValue)
+void Accumulate_Audio_Value(long audioValue)
 {
   //Serial.print("Accumulate_Audio_Value -> audioValue = ");          //Printing on COM port for debuging
   //Serial.println(_audioValue);									  //Printing on COM port for debuging
@@ -85,7 +85,7 @@ void Accumulate_Audio_Value(int audioValue)
   accumulate_RMS(actualAudioValue);
 }
 
-void accumulate_RMS(int actualAudioValue)
+void accumulate_RMS(long actualAudioValue)
 {
 	//Serial.print("Accumulate_Audio_Value -> audioValue = ");         //Printing on COM port for debuging
 	//Serial.println(_audio_value);									   //Printing on COM port for debuging
@@ -104,7 +104,7 @@ void accumulate_RMS(int actualAudioValue)
 	//Serial.println(RMS_count);									  //Printing on COM port for debuging
 
 	RMS_sum = RMS_sum + RMS;
-
+	RMS = 0;
 	//Serial.print("accumulate_RMS -> temp_RMS_sum = ");              //Printing on COM port for debuging
 	//Serial.println(RMS_sum);									  //Printing on COM port for debuging
 
@@ -119,18 +119,18 @@ void accumulate_RMS(int actualAudioValue)
     Accumulate_RMS_Average(RMS_clear);
 
 	//Reseting for new row of RMSes
-	RMS = 0;
     RMS_count = 0;
 	RMS_clear = 0;
+	RMS_sum = 0;
   }
 }
 
-void Accumulate_RMS_Average(int _RMS_clear)   //Accumulate_RMS_Average
+void Accumulate_RMS_Average(long RMS_clear)   //Accumulate_RMS_Average
 {
 	//Serial.print("Accumulate_RMS_Average -> _RMS_clear = ");                      //Printing on COM port for debuging
-	//Serial.println(_RMS_clear);
+	//Serial.println(RMS_clear);
 
-	RMS_clear_sum = RMS_clear_sum + _RMS_clear;
+	RMS_clear_sum = RMS_clear_sum + RMS_clear;
 
 	//Serial.print("Accumulate_RMS_Average -> RMS_clear_sum = ");                      //Printing on COM port for debuging
 	//Serial.println(RMS_clear_sum);
@@ -145,7 +145,7 @@ void Accumulate_RMS_Average(int _RMS_clear)   //Accumulate_RMS_Average
 				//Serial.print("Accumulate_RMS_Average -> RMS_clear_count = ");                      //Printing on COM port for debuging
 				//Serial.println(RMS_clear_count);
 
-				RMS_average = RMS_clear_sum / RMS_clear_count;
+				RMS_average = RMS_clear_sum / RMS_clear_count_max;
 
 				//Serial.print("Accumulate_RMS_Average -> RMS_average = ");                      //Printing on COM port for debuging
 				//Serial.println(RMS_average);
@@ -157,40 +157,45 @@ void Accumulate_RMS_Average(int _RMS_clear)   //Accumulate_RMS_Average
 
 				LightLEDs(NumLEDs);
 
+				//Serial.print("Accumulate_RMS_Average -> RMS_average = ");                      //Printing on COM port for debuging
+				//Serial.println(RMS_average);
 				RMS_clear_sum = 0;
 				RMS_clear_count = 0;
+				RMS_average = 0;
+				//Serial.print("Accumulate_RMS_Average -> RMS_average = ");                      //Printing on COM port for debuging
+				//Serial.println(RMS_average);
 		}
+
 }
 
-int Calculate_Number_of_LEDS_to_Light(int RMS_average)
+int Calculate_Number_of_LEDS_to_Light(long RMS_average)
 {
 	//Serial.print("Calculate_Number_of_LEDS_to_Light -> _RMS_sum = ");                      //Printing on COM port for debuging
 	//Serial.println(_RMS_sum);
 	//Serial.print("Calculate_Number_of_LEDS_to_Light -> MAX_NUM_LEDS = ");                      //Printing on COM port for debuging
 	//Serial.println(MAX_NUM_LEDS);
 
-	int leds_to_light = abs((RMS_average * MAX_NUM_LEDS)/1024);
+	int leds_to_light = (RMS_average * MAX_NUM_LEDS)/400;
 
-	//Serial.print("Calculate_Number_of_LEDS_to_Light -> i_leds_to_light = ");                      //Printing on COM port for debuging
-	//Serial.println(i_leds_to_light);
 	//Serial.print("Calculate_Number_of_LEDS_to_Light -> leds_to_light = ");                      //Printing on COM port for debuging
 	//Serial.println(leds_to_light);
 
+	////////////////////////////
 	if (leds_to_light <= 0)
 	{
-		return !leds_to_light;
+		leds_to_light = !leds_to_light;
 	}
-
+	///////////////////////////
 	return leds_to_light;
 }
 
 // ==============Led Strip=================
 void LightLEDs(int NumLEDs)
 {
-	Serial.print("---------LightLEDs---------");
+	//Serial.print("---------LightLEDs---------");
 	
 
-  byte red_On=0, green_On=255, blue_On=0;
+  byte red_On= 0, green_On= 0, blue_On= 255;
   byte red_Off=0, green_Off=0, blue_Off=0;
   
   for (int i = 0; i < MAX_NUM_LEDS; i++) {
@@ -199,20 +204,15 @@ void LightLEDs(int NumLEDs)
     else
       setPixel(i, red_Off, green_Off, blue_Off);
   }
-  showStrip();
+	//RainbowColors_p;
+	showStrip();
 }
 
 void showStrip() {
-#ifdef ADAFRUIT_NEOPIXEL_H 
-  // NeoPixel
-  strip.show();
-#endif
-#ifndef ADAFRUIT_NEOPIXEL_H
     #ifdef LED_INCLUDED 
     // FastLED
     FastLED.show();
     #endif
-#endif
 }
 
 void setPixel(int _Pixel, byte _red, byte _green, byte _blue) {
