@@ -44,16 +44,22 @@ double RMS_average = 0;
 int Led_Number = 3; //to delete
   
 void setup() {
+  Serial.print("-----------Setup Begin-------");                      //Printing on COM port for debuging
+  Serial.println();                      //Printing on COM port for debuging
   // put your setup code here, to run once:
   //pinMode(A1, INPUT); //?????
   pinMode(analog_Input_Aux_Mic, INPUT);
   #ifdef LED_INCLUDED 
     FastLED.addLeds<WS2812, PIN, GRB>(leds, MAX_NUM_LEDS).setCorrection(TypicalLEDStrip);
   #endif
+  Serial.print("-----------Setup end-------");                      //Printing on COM port for debuging
+  Serial.println();                      //Printing on COM port for debuging
 }
 
 void loop() {
   // put your main code here, to run repeatedly:
+  Serial.print("-----------loop-------");                      //Printing on COM port for debuging
+  Serial.println();                      //Printing on COM port for debuging
   ReadAnalogInput();
 }
 
